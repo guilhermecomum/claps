@@ -1,5 +1,10 @@
 <script>
  export let data
+ import { clave } from './store.js';
+
+ function handleClave(e) {
+   clave.set(e)
+ }
 </script>
 
 <style>
@@ -8,15 +13,16 @@
  }
 
  li {
-   color: red;
    list-style: none;
-   text-align: lefta;
+   text-align: left;
+   cursor: pointer;
+
  }
 </style>
 
 
 <ul>
   {#each data as entry }
-  <li>{entry.Nome}</li>
+  <li on:click={handleClave(entry)}>{entry.Nome}</li>
   {/each}
 </ul>
