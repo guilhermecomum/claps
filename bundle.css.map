@@ -1,0 +1,14 @@
+{
+  "version": 3,
+  "file": "bundle.css",
+  "sources": [
+    "../../App.svelte",
+    "../../List.svelte"
+  ],
+  "sourcesContent": [
+    "<script>\n import gs2json from './utils.js';\n import List from './List.svelte';\n import Sidebar from './Sidebar.svelte';\n import mock from './mock.json'\n import { claves, clave } from './store.js';\n let data\n const fetchData = (async () => {\n   const response = await fetch(`https://spreadsheets.google.com/feeds/cells/1ia-bi_1oIuVbNGtAWsQbF6jrUMp1ef7AuGhepLfTxqM/1/public/full?alt=json`);\n   const json = await response.json()\n   return data =  await gs2json(json)\n })()\n let clave_value\n function selectClave(selected) {\n   clave.set(selected)\n }\n\n //const data = gs2json(mock)\n claves.set(data)\n</script>\n\n<style>\n main {\n   display: flex;\n   justify-content: space-around;\n }\n</style>\n\n<main>\n  {#await fetchData}\n  carregando...\n  {:then data}\n  <List {data} />\n  <Sidebar />\n  {/await}\n</main>\np\n",
+    "<script>\n export let data\n import { clave } from './store.js';\n\n function handleClave(e) {\n   clave.set(e)\n }\n</script>\n\n<style>\n ul {\n   text-align: left;\n }\n\n li {\n   list-style: none;\n   text-align: left;\n   cursor: pointer;\n\n }\n</style>\n\n\n<ul>\n  {#each data as entry }\n  <li on:click={handleClave(entry)}>{entry.Nome}</li>\n  {/each}\n</ul>\n"
+  ],
+  "names": [],
+  "mappings": "AAsBC,IAAI,cAAC,CAAC,AACJ,OAAO,CAAE,IAAI,CACb,eAAe,CAAE,YAAY,AAC/B,CAAC;ACfD,EAAE,cAAC,CAAC,AACF,UAAU,CAAE,IAAI,AAClB,CAAC,AAED,EAAE,cAAC,CAAC,AACF,UAAU,CAAE,IAAI,CAChB,UAAU,CAAE,IAAI,CAChB,MAAM,CAAE,OAAO,AAEjB,CAAC"
+}
