@@ -1,21 +1,51 @@
 <script>
  export let data
- import { clave } from './store.js';
+ import { onMount, onDestroy } from 'svelte';
+ import inView from 'in-view'
+ import { activeListItem, activeMapItem } from './store.js';
+ import Guia from './Guia.svelte';
+ let list
 
- function handleClave(e) {
-   clave.set(e)
- }
+ onMount(async () => {
+   // Set a nicer offset so it's not a hard cutoff
+   inView.offset(200);
 
- $: $clave
- console.log($clave.name)
+   list.addEventListener('scroll', function(e) {
+     // Active list item is top-most fully-visible item
+     const visibleListItems = Array.from(document.getElementsByClassName('item')).map(inView.is);
+     // Array.indexOf() will give us the first one in list, so the current active item
+
+     const topMostVisible = visibleListItems.indexOf(true);
+     if (topMostVisible !== $activeMapItem) {
+       activeMapItem.set(topMostVisible)
+     }
+   });
+
+ });
+
+ // Update list scroll position when active list item is updated via map
+ const unsubscribeActiveListItem = activeListItem.subscribe(
+   newActiveListItem => {
+     if (list) {
+       list.scrollTop = document.getElementById(
+         `guia-${newActiveListItem}`
+       ).offsetTop;
+     }
+   }
+ );
+
+ onDestroy(unsubscribeActiveListItem);
 </script>
 
 <style>
- ul {
-   width: 190px;
+ .guias {
+   display: flex;
+   flex-direction: column;
    padding: 0;
    flex-shrink: 0;
    margin: 0;
+   overflow: scroll;
+   height: 100vh;
  }
 
  li {
@@ -36,14 +66,11 @@
 </style>
 
 
-<ul>
 
-  {#each data as entry }
-
-  <li
-    class:active="{entry.nome === $clave.nome}"
-    on:click={handleClave(entry)}>
-    {entry.nome}
-  </li>
+<div class="guias" bind:this={list}>
+  {#each data as clave, index }
+  <div class="item" id="guia-{index}">
+    <Guia  {clave} />
+  </div>
   {/each}
-</ul>
+</div>

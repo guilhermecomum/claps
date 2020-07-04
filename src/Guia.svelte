@@ -28,20 +28,24 @@
   {#if clave.texto}
   <p>{clave.texto}</p>
   {/if}
-  <iframe
-    width="560"
-    height="315"
-    src={clave.youtube.replace("watch?v=","embed/")}
-    frameborder="0"
-    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  <!-- <iframe
+       width="100%"
+       height="100%"
+       src={clave.youtube.replace("watch?v=","embed/")}
+       frameborder="0"
+       allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
 </div>
 
 <style>
+ iframe {
+   width: 100%;
+   height: auto;
+ }
  .guia {
    display: flex;
    flex-direction: column;
-   width: 600px;
    align-items: center;
+   min-height: 100vh;
  }
  h1 { text-align: center;}
  small {
