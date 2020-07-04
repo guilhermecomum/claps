@@ -9,7 +9,7 @@
      container,
      style: 'mapbox://styles/guerrinha/ckc70179o1sae1ip67q6upbgg',
      center: [-74.5, 40],
-     zoom: 9
+     zoom: 2
    });
  });
 </script>
