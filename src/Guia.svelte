@@ -28,7 +28,12 @@
   {#if clave.texto}
   <p>{clave.texto}</p>
   {/if}
-  <!-- <Youtube videoId={clave.youtube.slice(32)} /> -->
+  <iframe
+    width="560"
+    height="315"
+    src={clave.youtube.replace("watch?v=","embed/")}
+    frameborder="0"
+    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
 
 <style>
@@ -46,5 +51,8 @@
  canvas {
    width: 200px;
    height: 200px;
+ }
+ p {
+   padding: 0 20px;
  }
 </style>
