@@ -7,11 +7,11 @@ export default function gs2json(data) {
     var value = entry.content.$t;
     var row = entry["gs$cell"]["row"];
     var col = entry["gs$cell"]["col"];
-    var key = columns[col - 1];
     var newRow = {};
     if (entry["gs$cell"]["row"] === "1") {
       columns.push(value);
     } else {
+      var key = columns[col - 1].toLowerCase();
       rows[row] = { ...rows[row], [key]: value };
     }
   }

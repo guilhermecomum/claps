@@ -6,6 +6,4 @@
 
 {#if Object.keys($clave).length > 0}
 <Guia clave={$clave} />
-{:else}
-<p>Navegue no mapa e selecione um pin</p>
 {/if}
