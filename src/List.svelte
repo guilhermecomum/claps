@@ -14,6 +14,9 @@
     padding: 0;
     display: flex;
     border-bottom: 2px solid #eee;
+    position: fixed;
+    background: #fff;
+    width: 100%;
   }
 
   .filter {
@@ -21,6 +24,10 @@
     margin: 0;
     text-transform: uppercase;
     color: #8e8e8e;
+  }
+
+  .claves {
+    padding-top: 80px;
   }
 
   li {
@@ -51,7 +58,7 @@
   let filteredData = $claves
   onMount(async () => {
     // Set a nicer offset so it's not a hard cutoff
-    inView.offset(200)
+    inView.offset(300)
 
     list.addEventListener('scroll', function (e) {
       // Active list item is top-most fully-visible item
@@ -89,7 +96,7 @@
   onDestroy(unsubscribeActiveListItem)
 </script>
 
-<div class="guias" bind:this="{list}">
+<div class="guias"   bind:this="{list}">
   <ul class="filters">
     {#each $routes as route, index}
       <li class="filter" class:active="{activeRoute === index}" on:click="{() => handleFilter(index)}">
@@ -97,9 +104,11 @@
       </li>
     {/each}
   </ul>
-  {#each filteredData as clave}
-    <div class="item" id="guia-{clave.id}">
-      <Guia {clave} />
-    </div>
-  {/each}
+  <div class="claves">
+    {#each filteredData as clave}
+      <div class="item" id="guia-{clave.id}">
+        <Guia {clave} />
+      </div>
+    {/each}
+  </div>
 </div>
