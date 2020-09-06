@@ -1,18 +1,41 @@
-<style>
+<style lang="scss">
   div {
     width: 100%;
     height: 100%;
   }
 
-  div:before {
-    box-shadow: 20px 0 10px -10px rgba(0, 0, 0, 0.15) inset;
-    content: '';
-    height: 100%;
-    left: 0;
+  /* .map { */
+  /*   width: 100%; */
+  /*   height: 100%; */
+  /*   div { */
+  /*     width: 100%; */
+  /*     height: 100%; */
+  /*   } */
+  /* } */
+
+  .info {
     position: absolute;
-    width: 20px;
-    z-index: 1000;
+    bottom: 0;
+    height: 80px;
+    display: block;
+    left: 0;
+    right: 0;
+    background: white;
+    z-index: 2;
+    .body {
+      padding: 0 20px;
+      display: flex;
+    }
   }
+  /* div:before { */
+  /*   box-shadow: 20px 0 10px -10px rgba(0, 0, 0, 0.15) inset; */
+  /*   content: ''; */
+  /*   height: 100%; */
+  /*   left: 0; */
+  /*   position: absolute; */
+  /*   width: 20px; */
+  /*   z-index: 1000; */
+  /* } */
 </style>
 
 <script>
@@ -25,9 +48,13 @@
     activeMapItem,
   } from './store.js'
   import { isLatitude, isLongitude } from './utils.js'
-  import { lineString } from '@turf/helpers'
+  import Guia from './Guia.svelte'
+  console.log('filteredRoutes', $filteredRoutes)
   let container
   let map
+  let screenWidth = window.matchMedia('(max-width: 460px)')
+  let clickedItem
+  let showDetails = false
 
   function generateRoute(route) {
     const { nome, ...steps } = route
@@ -41,13 +68,17 @@
     return coords
   }
 
-  function generateFeature({ id, nome, lat, log }) {
+  function generateFeature({ id, nome, pais, lat, log, guia, texto, youtube }) {
     if (isLatitude(lat) && isLongitude(log)) {
       return {
         type: 'Feature',
         properties: {
-          description: nome,
-          id: id,
+          nome,
+          pais,
+          id,
+          guia,
+          texto,
+          youtube,
         },
         geometry: {
           type: 'Point',
@@ -64,7 +95,7 @@
       container,
       style: 'mapbox://styles/guerrinha/ckc70179o1sae1ip67q6upbgg',
       center: [parseFloat($claves[0].lat), parseFloat($claves[0].log)],
-      zoom: 3,
+      zoom: screenWidth.matches ? 0 : 5,
     })
 
     map.on('load', function () {
@@ -79,8 +110,8 @@
           },
         },
         layout: {
-          'icon-image': 'cafe-15',
-          'icon-size': 2,
+          'icon-image': 'marker-15',
+          'icon-size': 3,
           'icon-allow-overlap': true,
         },
       })
@@ -114,14 +145,10 @@
     map.on('click', 'places', function ({ features }) {
       const match = features[0]
       const coordinates = match.geometry.coordinates.slice()
-      //let line = lineString([[-33.044279 ,-55.602114], [-22.906972 , -43.195715]], {name: 'lin 1'});
       if (isLatitude(coordinates[0]) && isLongitude(coordinates[1])) {
-        // Show popup
-        new mapbox.Popup()
-          .setLngLat([coordinates[0], coordinates[1]])
-          .setHTML(match.properties.description)
-          .addTo(map)
-
+        showDetails = true
+        clickedItem = match.properties
+        console.log('clickedItem', clickedItem)
         activeListItem.set(match.properties.id)
       }
     })
@@ -178,4 +205,8 @@
   onDestroy(unsubscribeActiveMapItem, unsubscribeSelectedRoute)
 </script>
 
-<div bind:this="{container}"></div>
+<div class="map" bind:this="{container}"></div>
+
+{#if showDetails && screenWidth.matches}
+  <Guia clave="{clickedItem}" />
+{/if}

@@ -51,9 +51,18 @@
 <script>
   import { onMount, onDestroy } from 'svelte'
   import inView from 'in-view'
-  import { claves, routes, filteredRoutes, activeListItem, activeMapItem } from './store.js'
+
+  import {
+    claves,
+    routes,
+    filteredRoutes,
+    activeListItem,
+    activeMapItem,
+  } from './store.js'
   import Guia from './Guia.svelte'
+
   let list
+  let clavesContainer
   let activeRoute = 0
   let filteredData = $claves
   onMount(async () => {
@@ -100,10 +109,14 @@
   onDestroy(unsubscribeActiveListItem)
 </script>
 
-<div class="guias"   bind:this="{list}">
+<div class="guias" bind:this="{list}">
   <ul class="filters">
     {#each $routes as route, index}
-      <li class="filter" class:active="{activeRoute === index}" on:click="{() => handleFilter(index)}">
+      <li
+        class="filter"
+        class:active="{activeRoute === index}"
+        on:click="{() => handleFilter(index)}"
+      >
         {route.nome}
       </li>
     {/each}
@@ -111,7 +124,7 @@
   <div class="claves">
     {#each filteredData as clave}
       <div class="item" id="guia-{clave.id}">
-        <Guia {clave} />
+        <Guia clave="{clave}" />
       </div>
     {/each}
   </div>
