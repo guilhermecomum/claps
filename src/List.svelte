@@ -78,8 +78,12 @@
     activeRoute = routeIndex
     const { nome, ...steps } = $routes[routeIndex]
     const routeSteps = Object.values(steps)
-    filteredData = $claves.filter((clave) => routeSteps.includes(clave.id))
-    await filteredRoutes.set(filteredData)
+    filteredData = []
+    routeSteps.forEach((route) =>
+      filteredData.push($claves.find((clave) => clave.id == route))
+    )
+    list.scrollTop = 0
+    filteredRoutes.set(filteredData)
   }
 
   // Update list scroll position when active list item is updated via map
