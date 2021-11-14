@@ -19,10 +19,10 @@
       width: 100%;
     }
   }
+
 </style>
 
 <script>
-  import gs2json from './utils.js'
   import List from './List.svelte'
   import { claves, routes, filteredRoutes } from './store.js'
   import Map from './Map.svelte'
@@ -37,22 +37,23 @@
 
   const fetchData = (async () => {
     const responseClaves = await fetch(
-      `https://spreadsheets.google.com/feeds/cells/1ia-bi_1oIuVbNGtAWsQbF6jrUMp1ef7AuGhepLfTxqM/1/public/full?alt=json`
+      `https://opensheet.vercel.app/1ia-bi_1oIuVbNGtAWsQbF6jrUMp1ef7AuGhepLfTxqM/home`
     )
 
     const responseRoutes = await fetch(
-      `https://spreadsheets.google.com/feeds/cells/1ia-bi_1oIuVbNGtAWsQbF6jrUMp1ef7AuGhepLfTxqM/2/public/full?alt=json`
+      `https://opensheet.vercel.app/1ia-bi_1oIuVbNGtAWsQbF6jrUMp1ef7AuGhepLfTxqM/rotas`
     )
 
     const jsonClaves = await responseClaves.json()
     const jsonRoutes = await responseRoutes.json()
-    parsedClaves = gs2json(jsonClaves)
-    parsedRoutes = gs2json(jsonRoutes)
+    parsedClaves = jsonClaves
+    parsedRoutes = jsonRoutes
     claves.set(parsedClaves)
     routes.set(parsedRoutes)
     filteredRoutes.set(parsedClaves)
     return parsedClaves
   })()
+
 </script>
 
 <main>
